@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WellCare | تواصل معنا</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="container topbar__inner">
+    <div class="brand">
+      <div class="brand__logo">
+        <img src="images/wellcare-logo.png" alt="WellCare Logo">
+      </div>
+      <div class="brand__text">
+        <strong>WellCare</strong>
+        <small class="muted">تواصل معنا</small>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="التنقل الرئيسي">
+      <a class="nav__link" href="index.html">الرئيسية</a>
+      <a class="nav__link" href="products.html">المنتجات</a>
+      <a class="nav__link" href="guidance.html">الإرشاد الصحي</a>
+      <a class="nav__link is-active" href="contact.html">تواصل معنا</a>
+       <a class="nav__link" href="checkout_purch.html">الإيصال</a>
+    </nav>
+
+    <div class="topbar__actions">
+
+      <button class="pill" id="themeToggle" type="button" aria-pressed="false">🌙 <span>الوضع</span></button>
+      <div class="pill">🧺 <span class="badge" id="cartCount">0</span></div>
+      <!-- Mini Cart -->
+        <div id="miniCart" class="miniCart" hidden>
+          <div class="miniCart__head">
+            <strong>سلة المشتريات</strong>
+            <button id="closeMiniCart" class="miniCart__close" type="button">×</button>
+          </div>
+
+          <div id="miniCartItems" class="miniCart__items"></div>
+
+          <div class="miniCart__foot">
+            <div class="miniCart__total">
+              <span>الإجمالي:</span>
+              <strong id="miniCartTotal">0 د.ل</strong>
+            </div>
+
+            <!-- ✅ GO TO CHECKOUT -->
+            <a class="miniCart__clear"
+               href="checkout_purch.html"
+               style="text-align:center;display:block;">
+              الذهاب للإيصال
+            </a>
+
+            <!-- ✅ CLEAR CART -->
+            <button id="clearCart" class="miniCart__clear" type="button">تفريغ السلة</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+</header>
+
+<main>
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <div>
+          <h2>تواصل معنا</h2>
+          <p class="muted">نموذج تواصل تجريبي (لا يرسل بيانات حقيقية).</p>
+        </div>
+      </div>
+
+      <div class="contact">
+        <form class="form" id="contactForm">
+          <div class="form__row">
+            <div class="field">
+              <label class="field__label" for="name">الاسم</label>
+              <input id="name" type="text" placeholder="اكتب اسمك">
+            </div>
+            <div class="field">
+              <label class="field__label" for="email">البريد</label>
+              <input id="email" type="email" placeholder="name@example.com">
+            </div>
+          </div>
+
+          <div class="field" style="margin-top:16px;">
+            <label class="field__label" for="message">رسالتك</label>
+            <textarea id="message" rows="6" placeholder="اكتب استفسارك..."></textarea>
+          </div>
+
+          <div class="form__actions">
+            <button class="btn btn--primary" type="submit">إرسال </button>
+            <span class="muted" id="formStatus"></span>
+          </div>
+        </form>
+
+        <aside class="card sideCard">
+          <h3> :للتواصل معنا</h3>
+          <div class="divider"></div>
+          <p class="muted">
+            •   مواعيد العمل :يوميا من ال8 صباحا,حتى ال7 مساء.<br>
+            •   موقعنا : قرقارش ,ابونواس .<br>
+            •  رقم الهاتف: 0915394007   .
+          </p>
+          <div class="divider"></div>
+          <div class="prodImg" style="background-image:url('images/contact_us.png.jpg'); height:180px;"></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <p>© <span id="year"></span> WellCare — صفحة التواصل</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+
+</body>
+</html>

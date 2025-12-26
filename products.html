@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WellCare | المنتجات</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- =======================
+       TOPBAR / NAVBAR
+  ======================== -->
+  <header class="topbar">
+    <div class="container topbar__inner">
+
+      <div class="brand">
+        <div class="brand__logo">
+          <img src="images/wellcare-logo.png" alt="WellCare Logo">
+        </div>
+        <div class="brand__text">
+          <strong>WellCare</strong>
+          <small class="muted">صيدلية إلكترونية + إرشاد صحي</small>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a class="nav__link" href="index.html">الرئيسية</a>
+        <a class="nav__link is-active" href="products.html">المنتجات</a>
+        <a class="nav__link" href="guidance.html">الإرشاد الصحي</a>
+        <a class="nav__link" href="contact.html">تواصل معنا</a>
+        <a class="nav__link" href="checkout_purch.html">الإيصال</a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="topbar__actions">
+         <button class="pill" id="themeToggle" type="button">
+    <span class="pill__text">الوضع</span>
+    <span class="pill__icon" id="themeIcon">🌙</span>
+  </button>
+        <!-- Cart Button -->
+        <button id="cartBtn" class="cartBtn" type="button" aria-label="السلة">
+          🧺 <span id="cartCount" class="badge">0</span>
+        </button>
+       
+        <!-- Mini Cart -->
+        <div id="miniCart" class="miniCart" hidden>
+          <div class="miniCart__head">
+            <strong>سلة المشتريات</strong>
+            <button id="closeMiniCart" class="miniCart__close" type="button">×</button>
+          </div>
+
+          <div id="miniCartItems" class="miniCart__items"></div>
+
+          <div class="miniCart__foot">
+            <div class="miniCart__total">
+              <span>الإجمالي:</span>
+              <strong id="miniCartTotal">0 د.ل</strong>
+            </div>
+
+            <!-- ✅ GO TO CHECKOUT -->
+            <a class="miniCart__clear"
+               href="checkout_purch.html"
+               style="text-align:center;display:block;">
+              الذهاب للإيصال
+            </a>
+
+            <!-- ✅ CLEAR CART -->
+            <button id="clearCart" class="miniCart__clear" type="button">تفريغ السلة</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- =======================
+       PAGE HEADER
+  ======================== -->
+  <main class="section">
+    <div class="container">
+      <div class="section__head">
+        <div>
+          <h1>المنتجات</h1>
+          <p class="muted">اضغط (+) لإضافة المنتج للسلة ثم اضغط على السلة لرؤية طلباتك، أو اذهب للإيصال لإتمام الطلب.</p>
+        </div>
+      </div>
+
+      <!-- =======================
+           PRODUCTS GRID
+      ======================== -->
+      <div class="grid">
+
+        <!-- 1 -->
+        <article class="product-card" data-id="1">
+          <div class="prodImg" style="background-image:url('images/vitaminC.jpg')"></div>
+          <div class="prodTop">
+            <div>
+              <h3 class="prodTitle">فيتامين C 1000mg</h3>
+              <p class="prodDesc">يدعم المناعة ويساعد في تعويض الاحتياج اليومي.</p>
+            </div>
+            <span class="chip">مكملات</span>
+          </div>
+          <div class="prodMeta">
+            <span class="chip">مناعة</span>
+            <span class="chip">تغذية</span>
+          </div>
+          <div class="prodFooter">
+            <div class="price"><strong>32</strong> د.ل</div>
+            <button class="add-plus" data-add data-name="فيتامين C 1000mg" data-price="32" data-img="images/vitaminC.jpg" type="button">+</button>
+          </div>
+        </article>
+
+        <!-- 2 -->
+        <article class="product-card" data-id="2">
+          <div class="prodImg" style="background-image:url('images/tablets.jpg')"></div>
+          <div class="prodTop">
+            <div>
+              <h3 class="prodTitle">مسكن ألم (أقراص)</h3>
+              <p class="prodDesc">لتخفيف الألم الخفيف (نموذج توعوي).</p>
+            </div>
+            <span class="chip">أدوية</span>
+          </div>
+          <div class="prodMeta">
+            <span class="chip">ألم</span>
+            <span class="chip">عام</span>
+          </div>
+          <div class="prodFooter">
+            <div class="price"><strong>18</strong> د.ل</div>
+            <button class="add-plus" data-add data-name="مسكن ألم (أقراص)" data-price="18" data-img="images/tablets.jpg" type="button">+</button>
+          </div>
+        </article>
+
+        <!-- 3 -->
+        <article class="product-card" data-id="3">
+          <div class="prodImg" style="background-image:url('images/cough-syrup.jpg')"></div>
+          <div class="prodTop">
+            <div>
+              <h3 class="prodTitle">شراب السعال</h3>
+              <p class="prodDesc">يساعد على تهدئة السعال الجاف (اتبع التعليمات).</p>
+            </div>
+            <span class="chip">أدوية البرد</span>
+          </div>
+          <div class="prodMeta">
+            <span class="chip">سعال</span>
+            <span class="chip">برد</span>
+          </div>
+          <div class="prodFooter">
+            <div class="price"><strong>28</strong> د.ل</div>
+            <button class="add-plus" data-add data-name="شراب السعال" data-price="28" data-img="images/cough-syrup.jpg" type="button">+</button>
+          </div>
+        </article>
+
+        <!-- 4 -->
+        <article class="product-card" data-id="7">
+          <div class="prodImg" style="background-image:url('images/suplement_1.png')"></div>
+          <div class="prodTop">
+            <div>
+              <h3 class="prodTitle">مكمل غذائي (Supplement 1)</h3>
+              <p class="prodDesc">مكمل غذائي عام لدعم النشاط اليومي (نموذج تعليمي).</p>
+            </div>
+            <span class="chip">مكملات</span>
+          </div>
+          <div class="prodMeta">
+            <span class="chip">طاقة</span>
+            <span class="chip">تغذية</span>
+          </div>
+          <div class="prodFooter">
+            <div class="price"><strong>45</strong> د.ل</div>
+            <button class="add-plus" data-add data-name="مكمل غذائي (Supplement 1)" data-price="45" data-img="images/suplement_1.png" type="button">+</button>
+          </div>
+        </article>
+
+        <!-- 5 -->
+        <article class="product-card" data-id="8">
+          <div class="prodImg" style="background-image:url('images/suplement_2.png')"></div>
+          <div class="prodTop">
+            <div>
+              <h3 class="prodTitle">GlyNAC (NAC + Glycine)</h3>
+              <p class="prodDesc">تركيبة مكملات شائعة (نموذج تعليمي – ليس وصفة).</p>
+            </div>
+            <span class="chip">مكملات</span>
+          </div>
+          <div class="prodMeta">
+            <span class="chip">مناعة</span>
+            <span class="chip">مضادات</span>
+          </div>
+          <div class="prodFooter">
+            <div class="price"><strong>60</strong> د.ل</div>
+            <button class="add-plus" data-add data-name="GlyNAC (NAC + Glycine)" data-price="60" data-img="images/suplement_2.png" type="button">+</button>
+          </div>
+        </article>
+
+        <!-- 6 -->
+        <article class="product-card" data-id="9">
+          <div class="prodImg" style="background-image:url('images/suplement_3.jpeg')"></div>
+          <div class="prodTop">
+            <div>
+              <h3 class="prodTitle">مكمل غذائي (Supplement 3)</h3>
+              <p class="prodDesc">مكمل يومي — للاستخدام التوعوي داخل المشروع.</p>
+            </div>
+            <span class="chip">مكملات</span>
+          </div>
+          <div class="prodMeta">
+            <span class="chip">صحة</span>
+            <span class="chip">تغذية</span>
+          </div>
+          <div class="prodFooter">
+            <div class="price"><strong>52</strong> د.ل</div>
+            <button class="add-plus" data-add data-name="مكمل غذائي (Supplement 3)" data-price="52" data-img="images/suplement_3.jpeg" type="button">+</button>
+          </div>
+        </article>
+
+        <!-- 7 -->
+        <article class="product-card" data-id="10">
+          <div class="prodImg" style="background-image:url('images/suplement_4.jpg')"></div>
+          <div class="prodTop">
+            <div>
+              <h3 class="prodTitle">مكمل غذائي (Supplement 4)</h3>
+              <p class="prodDesc">مثال منتج مكمل بصورك الجديدة داخل مجلد الصور.</p>
+            </div>
+            <span class="chip">مكملات</span>
+          </div>
+          <div class="prodMeta">
+            <span class="chip">طاقة</span>
+            <span class="chip">رياضة</span>
+          </div>
+          <div class="prodFooter">
+            <div class="price"><strong>55</strong> د.ل</div>
+            <button class="add-plus" data-add data-name="مكمل غذائي (Supplement 4)" data-price="55" data-img="images/suplement_4.jpg" type="button">+</button>
+          </div>
+        </article>
+
+        <!-- 8 -->
+        <article class="product-card" data-id="11">
+          <div class="prodImg" style="background-image:url('images/suplement_5.png')"></div>
+          <div class="prodTop">
+            <div>
+              <h3 class="prodTitle">مكمل غذائي (Supplement 5)</h3>
+              <p class="prodDesc">منتج إضافي لزيادة عدد الكروت داخل الصفحة.</p>
+            </div>
+            <span class="chip">مكملات</span>
+          </div>
+          <div class="prodMeta">
+            <span class="chip">مناعة</span>
+            <span class="chip">تغذية</span>
+          </div>
+          <div class="prodFooter">
+            <div class="price"><strong>49</strong> د.ل</div>
+            <button class="add-plus" data-add data-name="مكمل غذائي (Supplement 5)" data-price="49" data-img="images/suplement_5.png" type="button">+</button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© WellCare — نموذج تعليمي لمقرر تصميم صفحات ويب</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

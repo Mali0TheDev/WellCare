@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WellCare | الإرشاد الصحي</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="container topbar__inner">
+    <div class="brand">
+      <div class="brand__logo">
+        <img src="images/wellcare-logo.png" alt="WellCare Logo">
+      </div>
+      <div class="brand__text">
+        <strong>WellCare</strong>
+        <small class="muted">الإرشاد الصحي</small>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="التنقل الرئيسي">
+      <a class="nav__link" href="index.html">الرئيسية</a>
+      <a class="nav__link" href="products.html">المنتجات</a>
+      <a class="nav__link is-active" href="guidance.html">الإرشاد الصحي</a>
+      <a class="nav__link" href="contact.html">تواصل معنا</a>
+      <a class="nav__link" href="checkout_purch.html">الإيصال</a>
+    </nav>
+
+    <div class="topbar__actions">
+      <button class="pill" id="themeToggle" type="button" aria-pressed="false" title="تبديل الوضع">
+        🌙 <span class="pill__text">الوضع</span>
+      </button>
+
+      <button id="cartBtn" class="pill" type="button" aria-label="السلة" title="السلة">
+        🧺 <span id="cartCount" class="badge">0</span>
+      </button>
+
+      <div id="miniCart" class="miniCart" hidden>
+        <div class="miniCart__head">
+          <strong>سلة المشتريات</strong>
+          <button id="closeMiniCart" class="miniCart__close" type="button">×</button>
+        </div>
+
+        <div id="miniCartItems" class="miniCart__items"></div>
+
+        <div class="miniCart__foot">
+          <div class="miniCart__total">
+            <span>الإجمالي:</span>
+            <strong id="miniCartTotal">0 د.ل</strong>
+          </div>
+
+          <a class="miniCart__clear"
+             href="checkout_purch.html"
+             style="text-align:center;display:block;">
+            الذهاب للإيصال
+          </a>
+
+          <button id="clearCart" class="miniCart__clear" type="button">تفريغ السلة</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <div>
+          <h2>الإرشاد الصحي</h2>
+          <p class="muted">معلومات مبسطة تساعدك تختار وتستخدم المنتجات بشكل صحيح (نموذج توعوي).</p>
+        </div>
+      </div>
+
+      <div class="accordion" id="accordion">
+        <div class="accItem">
+          <button class="accBtn" type="button" aria-expanded="false">
+            كيف أختار المنتج المناسب للحساسية؟
+            <span class="accIcon" aria-hidden="true">＋</span>
+          </button>
+          <div class="accPanel">
+            <p>اختَر منتجات مكتوب عليها “مناسبة للبشرة الحساسة” وابدأ بكمية صغيرة، وتجنب العطور القوية.</p>
+          </div>
+        </div>
+
+        <div class="accItem">
+          <button class="accBtn" type="button" aria-expanded="false">
+            نصائح لاستخدام المكملات (فيتامينات)
+            <span class="accIcon" aria-hidden="true">＋</span>
+          </button>
+          <div class="accPanel">
+            <p>التزم بالجرعة، وتجنب خلط مكملات كثيرة معًا دون استشارة مختص خصوصًا عند وجود أمراض مزمنة.</p>
+          </div>
+        </div>
+
+        <div class="accItem">
+          <button class="accBtn" type="button" aria-expanded="false">
+            الفرق بين أدوية البرد ومسكن الألم
+            <span class="accIcon" aria-hidden="true">＋</span>
+          </button>
+          <div class="accPanel">
+            <p>دواء البرد يعالج الأعراض مثل الاحتقان والسعال، بينما المسكن يخفف الألم/الحرارة. انتبه لتكرار نفس المادة الفعالة.</p>
+          </div>
+        </div>
+
+        <div class="accItem">
+          <button class="accBtn" type="button" aria-expanded="false">
+            متى أحتاج مراجعة طبيب؟
+            <span class="accIcon" aria-hidden="true">＋</span>
+          </button>
+          <div class="accPanel">
+            <p>إذا استمرت الأعراض أكثر من عدة أيام، أو ظهرت أعراض قوية مثل صعوبة التنفس أو حرارة عالية مستمرة.</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="note" style="margin-top:18px;">
+        تنبيه: المعلومات قمنا بالبحث عنها شخصيا ولكنها لا تغني عن الدهاب الى الاستشاري .
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <p>© <span id="year"></span> WellCare — صفحة الإرشاد الصحي</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+
+<!-- ✅ Guidance accordion fix (keeps your app.js untouched) -->
+<script>
+  (function () {
+    const items = document.querySelectorAll("#accordion .accItem");
+    if (!items.length) return;
+
+    items.forEach((item) => {
+      const btn = item.querySelector(".accBtn");
+      const panel = item.querySelector(".accPanel");
+      const icon = item.querySelector(".accIcon");
+      if (!btn || !panel) return;
+
+      // initial closed
+      item.classList.remove("is-open");
+      btn.setAttribute("aria-expanded", "false");
+
+      btn.addEventListener("click", () => {
+        const isOpen = item.classList.contains("is-open");
+
+        // close all (optional: comment next 4 lines if you want multiple open)
+        items.forEach((x) => {
+          x.classList.remove("is-open");
+          const b = x.querySelector(".accBtn");
+          const ic = x.querySelector(".accIcon");
+          if (b) b.setAttribute("aria-expanded", "false");
+          if (ic) ic.textContent = "＋";
+        });
+
+        if (!isOpen) {
+          item.classList.add("is-open");
+          btn.setAttribute("aria-expanded", "true");
+          if (icon) icon.textContent = "−";
+        } else {
+          item.classList.remove("is-open");
+          btn.setAttribute("aria-expanded", "false");
+          if (icon) icon.textContent = "＋";
+        }
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

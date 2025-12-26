@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WellCare | إيصال الشراء</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="container topbar__inner">
+
+      <div class="brand">
+        <div class="brand__logo">
+          <img src="images/wellcare-logo.png" alt="WellCare Logo">
+        </div>
+        <div class="brand__text">
+          <strong>WellCare</strong>
+          <small class="muted">صيدلية إلكترونية + إرشاد صحي</small>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a class="nav__link" href="index.html">الرئيسية</a>
+        <a class="nav__link" href="products.html">المنتجات</a>
+        <a class="nav__link" href="guidance.html">الإرشاد الصحي</a>
+        <a class="nav__link" href="contact.html">تواصل معنا</a>
+        <a class="nav__link is-active" href="checkout_purch.html">الإيصال</a>
+      </nav>
+      
+
+      <!-- Cart (same on all pages) -->
+      <div class="topbar__actions">
+        <button class="pill" id="themeToggle" type="button" aria-pressed="false">🌙 <span>الوضع</span></button>
+        <button id="cartBtn" class="cartBtn" type="button" aria-label="السلة">
+          🧺 <span id="cartCount" class="badge">0</span>
+
+        </button>
+
+        <div id="miniCart" class="miniCart" hidden>
+          <div class="miniCart__head">
+            <strong>سلة المشتريات</strong>
+            <button id="closeMiniCart" class="miniCart__close" type="button">×</button>
+          </div>
+
+          <div id="miniCartItems" class="miniCart__items"></div>
+
+          <div class="miniCart__foot">
+            <div class="miniCart__total">
+              <span>الإجمالي:</span>
+              <strong id="miniCartTotal">0 د.ل</strong>
+            </div>
+
+            <a class="miniCart__clear" href="checkout_purch.html" style="text-align:center;display:block;">
+              الذهاب للإيصال
+            </a>
+
+            <button id="clearCart" class="miniCart__clear" type="button">تفريغ السلة</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- PAGE -->
+  <main class="section">
+    <div class="container">
+
+      <div class="section__head">
+        <div>
+          <h1>إيصال الشراء</h1>
+          <p class="muted">هنا تظهر المنتجات التي أضفتها للسلة عبر زر (+). يمكنك تعديل الكمية أو الحذف ثم تأكيد الشراء.</p>
+        </div>
+      </div>
+
+      <section class="checkoutWrap">
+        <div class="checkoutCard">
+          <div class="checkoutHead">
+            <h2>محتوى السلة</h2>
+            <p class="muted" id="checkoutHint">—</p>
+          </div>
+
+          <div id="checkoutItems" class="checkoutItems"></div>
+
+          <div class="checkoutSummary">
+            <div class="sumRow">
+              <span>عدد المنتجات:</span>
+              <strong id="checkoutCount">0</strong>
+            </div>
+            <div class="sumRow">
+              <span>الإجمالي:</span>
+              <strong id="checkoutTotal">0 د.ل</strong>
+            </div>
+
+            <div class="sumActions">
+              <button id="confirmPurchase" class="btn btn--primary" type="button">تأكيد الشراء</button>
+              <button id="clearCartCheckout" class="btn" type="button">تفريغ السلة</button>
+            </div>
+
+            <p class="note">تنبيه: هذا نموذج تعليمي (لا يوجد دفع حقيقي).</p>
+          </div>
+        </div>
+
+        <!-- THANK YOU POPUP -->
+        <div id="thankYou" class="thankYou" hidden aria-live="polite">
+          <div class="thankYou__card">
+            <div class="thankYou__icon" aria-hidden="true">✅</div>
+            <h3>شكرًا لك!</h3>
+            <p class="muted">تم تأكيد طلبك بنجاح. نتمنى لك الصحة والعافية 💚</p>
+            <div class="thankYou__actions">
+              <a class="btn btn--primary" href="products.html">العودة للمنتجات</a>
+              <button id="closeThankYou" class="btn" type="button">إغلاق</button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© WellCare — نموذج تعليمي لمقرر تصميم صفحات ويب</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

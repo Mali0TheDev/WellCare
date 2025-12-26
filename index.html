@@ -1,0 +1,194 @@
+<!--
+=====================================================
+ Project Title : WellCare – صيدلية إلكترونية وإرشاد صحي
+ Course        : Web Design
+ Project Type  : Front-End Website (HTML, CSS, JavaScript)
+
+ Students:
+ - سفيان ناصر الخطابي | 232269
+ - مالك جمال مملوك     | 232858
+قمنا بي ىتطبيق جميع المتطلبات المدكورة في ورقة متطلبات التصميم مع اضافات اردنا اضافتها في مشروعنا 
+ Language      : Arabic (RTL)
+ Responsive    : Yes
+=====================================================
+-->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WellCare | الرئيسية</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="container topbar__inner">
+    <div class="brand">
+      <div class="brand__logo" title="WellCare">
+        <img src="images/wellcare-logo.png" alt="WellCare Logo">
+      </div>
+      <div class="brand__text">
+        <strong>WellCare</strong>
+        <small class="muted">صيدلية إلكترونية + إرشاد صحي</small>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="التنقل الرئيسي">
+      <a class="nav__link is-active" href="index.html">الرئيسية</a>
+      <a class="nav__link" href="products.html">المنتجات</a>
+      <a class="nav__link" href="guidance.html">الإرشاد الصحي</a>
+      <a class="nav__link" href="contact.html">تواصل معنا</a>
+       <a class="nav__link" href="checkout_purch.html">الإيصال</a>
+    </nav>
+
+    <!-- أزرار اختيارية (إذا عندك JS للتبديل رح تشتغل، إذا لا ما تسبب مشاكل) -->
+    <div class="topbar__actions">
+      <button  class="pill" id="themeToggle" type="button" aria-pressed="false" title="تبديل الوضع">
+        🌙 <span>الوضع</span>
+      </button>
+        <button id="cartBtn" class="cartBtn" type="button" aria-label="السلة">
+          🧺 <span id="cartCount" class="badge">0</span>
+  </div>
+        </button>
+         <!-- Mini Cart -->
+        <div id="miniCart" class="miniCart" hidden>
+          <div class="miniCart__head">
+            <strong>سلة المشتريات</strong>
+            <button id="closeMiniCart" class="miniCart__close" type="button">×</button>
+          </div>
+
+          <div id="miniCartItems" class="miniCart__items"></div>
+
+          <div class="miniCart__foot">
+            <div class="miniCart__total">
+              <span>الإجمالي:</span>
+              <strong id="miniCartTotal">0 د.ل</strong>
+            </div>
+
+            <!-- ✅ GO TO CHECKOUT -->
+            <a class="miniCart__clear"
+               href="checkout_purch.html"
+               style="text-align:center;display:block;">
+              الذهاب للإيصال
+            </a>
+
+            <!-- ✅ CLEAR CART -->
+            <button id="clearCart" class="miniCart__clear" type="button">تفريغ السلة</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- =========================
+       HERO
+  ========================== -->
+  <section class="hero section">
+    <div class="container hero__grid">
+      <div class="hero__content">
+        <h1>WellCare — صيدلية إلكترونية مع بصمة ليبية وإرشاد صحي مبسّط</h1>
+        <p class="muted">
+          موقع Front-End تعليمي تحت اشراف الدكتورة: امال النوري و عمل كل من الطلبة: <br>سفيان ناصر الخطابي،
+          و مالك جمال المملوك.
+        </p>
+
+        <div class="hero__stats">
+          <span class="stat">✅ <strong>تصميم متجاوب</strong></span>
+          <span class="stat">🧩 <strong>تفاعلات JavaScript</strong></span>
+          <span class="stat">🌿 <strong>هوية مريحة</strong></span>
+        </div>
+
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="products.html">ابدأ تصفح المنتجات</a>
+          <a class="btn btn--secondary" href="guidance.html">اقرأ الإرشادات الصحية</a>
+        </div>
+
+      </div>
+
+      <!-- بطاقة جانبية -->
+      <aside class="card">
+        <div class="card__header">
+          <h3>نظرة سريعة</h3>
+          <span class="chip">Front-End</span>
+        </div>
+        <div class="divider"></div>
+        <p class="muted">
+          في صفحات هذا المشروع:
+          <br>• منتجات مع صور + تقييم + سعر
+          <br>• إرشادات صحية (Accordion)
+          <br>• نموذج تواصل 
+          <br>• وضع داكن / فاتح
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- =========================
+       Preview Products (اختياري)
+  ========================== -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section__head">
+        <h2>منتجات مميزة</h2>
+        <a class="btn btn--secondary" href="products.html">عرض الكل</a>
+      </div>
+
+      <div class="grid">
+        <article class="product-card" data-id="1">
+          <div class="prodImg" aria-hidden="true"></div>
+          <div class="prodTop">
+            <h3 class="prodTitle">فيتامين C 1000mg</h3>
+            <span class="chip">⭐ 4.6</span>
+          </div>
+          <p class="prodDesc">يدعم المناعة ويساعد في تعويض الاحتياج اليومي.</p>
+          <div class="prodFooter">
+            <div class="price"><small class="muted">السعر</small> <strong>45 د.ل</strong></div>
+            <a class="btn btn--secondary" href="products.html">التفاصيل</a>
+          </div>
+        </article>
+
+        <article class="product-card" data-id="6">
+          <div class="prodImg" aria-hidden="true"></div>
+          <div class="prodTop">
+            <h3 class="prodTitle">منتج عناية بالبشرة</h3>
+            <span class="chip">⭐ 4.7</span>
+          </div>
+          <p class="prodDesc">ترطيب لطيف للبشرة الحساسة بتركيبة مريحة.</p>
+          <div class="prodFooter">
+            <div class="price"><small class="muted">السعر</small> <strong>70 د.ل</strong></div>
+            <a class="btn btn--secondary" href="products.html">التفاصيل</a>
+          </div>
+        </article>
+
+        <article class="product-card" data-id="3">
+          <div class="prodImg" aria-hidden="true"></div>
+          <div class="prodTop">
+            <h3 class="prodTitle">شراب سعال</h3>
+            <span class="chip">⭐ 4.2</span>
+          </div>
+          <p class="prodDesc">يساعد على تهدئة السعال الخفيف .</p>
+          <div class="prodFooter">
+            <div class="price"><small class="muted">السعر</small> <strong>32 د.ل</strong></div>
+            <a class="btn btn--secondary" href="products.html">التفاصيل</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <p>© <span id="year"></span> WellCare  </p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
