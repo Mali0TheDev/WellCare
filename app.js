@@ -1,11 +1,10 @@
 /* =====================================================
-   WellCare - app.js (Unified)
+   WellCare - app.js (Unified FINAL)
    - Theme (dark/light)
    - Cart (localStorage) + MiniCart
-   - Products (+) adds items
-   - Products filter (AUTO): scroll chips + search + PRICE RANGE slider
-   - Checkout page renders items + qty +/- + delete
-   - Guidance accordion fixed (shows/hides description)
+   - Products: Category DROPDOWN + Search + Price RANGE (compact)
+   - Checkout: render + qty +/- + delete + THANK YOU popup
+   - Guidance: accordion open/close (works even if panels had hidden)
 ===================================================== */
 
 (() => {
@@ -17,16 +16,15 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
   const clampInt = (n, min, max) => Math.max(min, Math.min(max, n));
-
   const norm = (s) =>
     String(s ?? "")
       .toLowerCase()
       .trim()
       .replace(/\s+/g, " ");
 
-  // -------------------------
-  // Theme
-  // -------------------------
+  /* -------------------------
+     Theme
+  ------------------------- */
   function getSavedTheme() {
     const t = localStorage.getItem(THEME_KEY);
     if (t === "dark" || t === "light") return t;
@@ -41,9 +39,8 @@
     const btn = $("#themeToggle");
     if (btn) {
       btn.setAttribute("aria-pressed", isDark ? "true" : "false");
-      const iconEl = $("#themeIcon");
-      if (iconEl) iconEl.textContent = isDark ? "☀️" : "🌙";
-      else btn.innerHTML = `${isDark ? "☀️" : "🌙"} <span>الوضع</span>`;
+      // keep your button text structure:
+      btn.innerHTML = `${isDark ? "☀️" : "🌙"} <span>الوضع</span>`;
     }
   }
 
@@ -58,9 +55,9 @@
     });
   }
 
-  // -------------------------
-  // Cart Storage
-  // -------------------------
+  /* -------------------------
+     Cart Storage
+  ------------------------- */
   function loadCart() {
     try {
       const raw = localStorage.getItem(CART_KEY);
@@ -73,6 +70,11 @@
 
   function saveCart(cart) {
     localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  }
+
+  function clearCart() {
+    saveCart([]);
+    return [];
   }
 
   function getCartCount(cart) {
@@ -109,24 +111,17 @@
     return cart;
   }
 
-  function clearCart() {
-    saveCart([]);
-    return [];
-  }
-
-  // -------------------------
-  // MiniCart
-  // -------------------------
+  /* -------------------------
+     MiniCart UI
+  ------------------------- */
   function openMiniCart() {
     const mini = $("#miniCart");
-    if (!mini) return;
-    mini.hidden = false;
+    if (mini) mini.hidden = false;
   }
 
   function closeMiniCart() {
     const mini = $("#miniCart");
-    if (!mini) return;
-    mini.hidden = true;
+    if (mini) mini.hidden = true;
   }
 
   function toggleMiniCart() {
@@ -145,7 +140,6 @@
     const totalEl = $("#miniCartTotal");
 
     if (totalEl) totalEl.textContent = `${getCartTotal(cart)} د.ل`;
-
     if (!itemsEl) return;
 
     if (cart.length === 0) {
@@ -156,22 +150,22 @@
     itemsEl.innerHTML = cart
       .map(
         (it, i) => `
-      <div class="miniItem">
-        <img src="${it.img}" alt="${it.name}">
-        <div class="miniItem__info">
-          <p class="miniItem__name">${it.name}</p>
-          <div class="miniItem__price">${it.price} د.ل</div>
-        </div>
+        <div class="miniItem">
+          <img src="${it.img}" alt="${it.name}">
+          <div class="miniItem__info">
+            <p class="miniItem__name">${it.name}</p>
+            <div class="miniItem__price">${it.price} د.ل</div>
+          </div>
 
-        <div class="miniItem__qty">
-          <button class="qtyBtn" data-mini-minus="${i}" type="button">-</button>
-          <strong>${it.qty}</strong>
-          <button class="qtyBtn" data-mini-plus="${i}" type="button">+</button>
-        </div>
+          <div class="miniItem__qty">
+            <button class="qtyBtn" data-mini-minus="${i}" type="button">-</button>
+            <strong>${it.qty}</strong>
+            <button class="qtyBtn" data-mini-plus="${i}" type="button">+</button>
+          </div>
 
-        <button class="removeBtn" title="حذف" data-mini-remove="${i}" type="button">🗑️</button>
-      </div>
-    `
+          <button class="removeBtn" title="حذف" data-mini-remove="${i}" type="button">🗑️</button>
+        </div>
+      `
       )
       .join("");
 
@@ -242,9 +236,9 @@
     });
   }
 
-  // -------------------------
-  // Products (+)
-  // -------------------------
+  /* -------------------------
+     Products: Add Buttons
+  ------------------------- */
   function initAddButtons() {
     $$("[data-add]").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -258,216 +252,140 @@
     });
   }
 
-  // =====================================================
-  // Products Filter (AUTO)
-  // - Chips Scroll
-  // - Search
-  // - Price Range Slider (cursor)
-  // =====================================================
-  function initProductsFilterAuto() {
-    const addBtns = $$("button[data-add], [data-add]");
+  /* =====================================================
+     Products Filters (Dropdown + Search + Range)
+     Requirements:
+     - HTML elements exist:
+       #categorySelect, #productSearch, #priceRange, #priceValue, #priceFilterWrap
+     - If not present, we create them automatically and insert above the grid.
+  ===================================================== */
+  function initProductsFilters() {
+    const addBtns = $$("[data-add]");
     if (addBtns.length === 0) return; // not products page
 
-    // Build product cards list by nearest parent containing the add button
-    const cardSet = new Set();
-    addBtns.forEach((btn) => {
-      const card =
-        btn.closest(".product-card, .product, .card, article, li, .box") ||
-        btn.closest("div") ||
-        btn.parentElement;
-      if (card) cardSet.add(card);
-    });
-    const cards = Array.from(cardSet);
+    // cards are .product-card in your products.html
+    const cards = Array.from(new Set(addBtns.map((b) => b.closest(".product-card")).filter(Boolean)));
     if (cards.length === 0) return;
 
     const firstCard = cards[0];
     const grid =
-      firstCard.closest(".products-grid, .grid, .products, .productsContainer, .cards, .container") ||
-      firstCard.parentElement;
+      firstCard.closest(".grid, .products-grid, .products, .cards, .container") || firstCard.parentElement;
 
-    // Create / reuse UI
-    let filterWrap = $("#productFilters");
-    if (!filterWrap) {
-      filterWrap = document.createElement("div");
-      filterWrap.id = "productFilters";
-      filterWrap.className = "filterBar";
+    // ensure UI container exists
+    let ui = $(".productsFilters");
+    if (!ui) {
+      ui = document.createElement("div");
+      ui.className = "productsFilters";
+      ui.innerHTML = `
+        <div class="filtersRow">
+          <select id="categorySelect" class="filterSelect">
+            <option value="all">الكل</option>
+          </select>
+
+          <input id="productSearch" class="productSearch" type="search"
+                 placeholder="ابحث عن منتج..." autocomplete="off" />
+        </div>
+
+        <div class="priceFilterWrap" id="priceFilterWrap">
+          <div class="priceLabel">
+            <strong>السعر الأقصى:</strong>
+            <span id="priceValue">—</span>
+          </div>
+          <input id="priceRange" class="priceRange" type="range" />
+        </div>
+      `;
+      if (grid && grid.parentElement) grid.parentElement.insertBefore(ui, grid);
+      else firstCard.parentElement?.insertBefore(ui, firstCard);
     }
 
-    let searchInput = $("#productSearch");
-    if (!searchInput) {
-      searchInput = document.createElement("input");
-      searchInput.id = "productSearch";
-      searchInput.type = "search";
-      searchInput.placeholder = "ابحث عن منتج...";
-      searchInput.className = "productSearch";
-      searchInput.autocomplete = "off";
-    }
+    const categorySelect = $("#categorySelect");
+    const searchInput = $("#productSearch");
+    const priceWrap = $("#priceFilterWrap");
+    const priceRange = $("#priceRange");
+    const priceValue = $("#priceValue");
 
-    // --- Price Range UI (slider)
-    let priceWrap = $("#priceFilterWrap");
-    let priceRange = $("#priceRange");
-    let priceValue = $("#priceValue");
-
-    if (!priceWrap) {
-      priceWrap = document.createElement("div");
-      priceWrap.id = "priceFilterWrap";
-      priceWrap.className = "priceFilterWrap";
-
-      const label = document.createElement("div");
-      label.className = "priceLabel";
-      label.innerHTML = `<strong>السعر الأقصى:</strong> <span id="priceValue">—</span>`;
-
-      priceRange = document.createElement("input");
-      priceRange.type = "range";
-      priceRange.id = "priceRange";
-      priceRange.className = "priceRange";
-
-      priceWrap.appendChild(label);
-      priceWrap.appendChild(priceRange);
-
-      // keep ref
-      priceValue = $("#priceValue", priceWrap);
-    }
-
-    // Main UI container
-    const uiContainer = document.createElement("div");
-    uiContainer.className = "productsFilterUI";
-    uiContainer.appendChild(filterWrap);
-    uiContainer.appendChild(searchInput);
-    uiContainer.appendChild(priceWrap);
-
-    // Insert only if not already inserted
-    if (!$("#productFilters")?.closest(".productsFilterUI")) {
-      if (grid && grid.parentElement) grid.parentElement.insertBefore(uiContainer, grid);
-      else firstCard.parentElement?.insertBefore(uiContainer, firstCard);
-    }
-
-    // Categories extraction
+    // Extract categories from each card's .chip spans (your file uses spans)
     const categories = new Set();
 
-    function getCardCategoryList(card) {
-      const list = [];
-
-      const dataCat = card.dataset.category || card.dataset.cat;
-      if (dataCat) list.push(...String(dataCat).split(",").map((x) => x.trim()).filter(Boolean));
-
-      const tagEls = $$(".tag, .badge, .pill, .chip, [data-tag]", card);
-      tagEls.forEach((t) => {
-        const txt = t.textContent?.trim();
-        if (!txt) return;
-        if (txt.includes("د.ل")) return; // ignore prices
-        if (txt === "+") return;
-        list.push(txt);
-      });
-
-      return Array.from(new Set(list.map((x) => x.trim()).filter(Boolean)));
+    function getCardCategories(card) {
+      const chips = $$(".chip", card)
+        .map((c) => (c.textContent || "").trim())
+        .filter(Boolean)
+        .filter((t) => !t.includes("د.ل") && t !== "+");
+      return Array.from(new Set(chips));
     }
 
-    // Prices: read from button[data-add].dataset.price primarily
-    function getCardPrice(card) {
-      const btn = $("button[data-add], [data-add]", card);
-      const p = btn?.dataset?.price;
-      const num = Number(p);
-      return Number.isFinite(num) ? num : 0;
-    }
-
-    cards.forEach((c) => {
-      getCardCategoryList(c).forEach((cat) => categories.add(cat));
+    cards.forEach((card) => {
+      getCardCategories(card).forEach((cat) => categories.add(cat));
     });
 
-    // Setup price slider min/max from products
-    const prices = cards.map(getCardPrice).filter((p) => Number.isFinite(p) && p > 0);
+    // Fill dropdown once
+    if (categorySelect) {
+      while (categorySelect.options.length > 1) categorySelect.remove(1);
+      Array.from(categories)
+        .sort((a, b) => a.localeCompare(b, "ar"))
+        .forEach((cat) => {
+          const opt = document.createElement("option");
+          opt.value = norm(cat);
+          opt.textContent = cat;
+          categorySelect.appendChild(opt);
+        });
+    }
+
+    function getPrice(card) {
+      const btn = $("[data-add]", card);
+      const p = Number(btn?.dataset?.price);
+      return Number.isFinite(p) ? p : 0;
+    }
+
+    const prices = cards.map(getPrice).filter((p) => p > 0);
     const minP = prices.length ? Math.min(...prices) : 0;
     const maxP = prices.length ? Math.max(...prices) : 0;
 
-    // If no prices found, hide the slider (so you don't see useless UI)
-    const canPrice = maxP > 0;
-    priceWrap.style.display = canPrice ? "" : "none";
+    let maxAllowed = maxP > 0 ? maxP : Infinity;
 
-    if (canPrice) {
+    // setup range
+    if (priceRange && maxP > 0) {
+      priceWrap.style.display = "";
       priceRange.min = String(minP);
       priceRange.max = String(maxP);
       priceRange.step = "1";
-      priceRange.value = String(maxP); // start showing all
-
-      priceValue.textContent = `${maxP} د.ل`;
+      priceRange.value = String(maxP);
+      maxAllowed = maxP;
+      if (priceValue) priceValue.textContent = `${maxP} د.ل`;
+    } else if (priceWrap) {
+      priceWrap.style.display = "none";
     }
-
-    // Build chips
-    filterWrap.innerHTML = "";
-
-    const allChip = document.createElement("button");
-    allChip.type = "button";
-    allChip.className = "chip is-active";
-    allChip.dataset.filter = "all";
-    allChip.textContent = "الكل";
-    filterWrap.appendChild(allChip);
-
-    Array.from(categories)
-      .sort((a, b) => a.localeCompare(b, "ar"))
-      .forEach((cat) => {
-        const chip = document.createElement("button");
-        chip.type = "button";
-        chip.className = "chip";
-        chip.dataset.filter = norm(cat);
-        chip.textContent = cat;
-        filterWrap.appendChild(chip);
-      });
-
-    let activeFilter = "all";
-    let searchValue = "";
-    let maxAllowedPrice = canPrice ? Number(priceRange.value) : Infinity;
-
+  
     function cardText(card) {
-      const btn = $("button[data-add], [data-add]", card);
-      const dsName = btn?.dataset?.name || card.dataset.name || "";
-      const dsTags = card.dataset.tags || "";
-      return norm(`${dsName} ${dsTags} ${card.innerText || ""}`);
-    }
-
-    function cardHasCategory(card, filterNorm) {
-      if (filterNorm === "all") return true;
-      const list = getCardCategoryList(card).map(norm);
-      if (list.includes(filterNorm)) return true;
-      return cardText(card).includes(filterNorm);
+      const btn = $("[data-add]", card);
+      const name = btn?.dataset?.name || "";
+      return norm(`${name} ${card.innerText || ""}`);
     }
 
     function apply() {
-      const f = norm(activeFilter || "all");
-      const q = norm(searchValue);
+      const cat = categorySelect ? norm(categorySelect.value || "all") : "all";
+      const q = searchInput ? norm(searchInput.value || "") : "";
 
       cards.forEach((card) => {
-        const price = getCardPrice(card);
+        const cats = getCardCategories(card).map(norm);
+        const price = getPrice(card);
 
-        const okFilter = cardHasCategory(card, f);
+        const okCat = cat === "all" ? true : cats.includes(cat);
         const okSearch = q ? cardText(card).includes(q) : true;
-        const okPrice = canPrice ? price <= maxAllowedPrice : true;
+        const okPrice = maxP > 0 ? price <= maxAllowed : true;
 
-        card.style.display = okFilter && okSearch && okPrice ? "" : "none";
+        card.style.display = okCat && okSearch && okPrice ? "" : "none";
       });
     }
 
-    // Chip events
-    $$("[data-filter]", filterWrap).forEach((chip) => {
-      chip.addEventListener("click", () => {
-        $$("[data-filter]", filterWrap).forEach((c) => c.classList.remove("is-active"));
-        chip.classList.add("is-active");
-        activeFilter = chip.dataset.filter || "all";
-        apply();
-      });
-    });
+    if (categorySelect) categorySelect.addEventListener("change", apply);
+    if (searchInput) searchInput.addEventListener("input", apply);
 
-    // Search events
-    searchInput.addEventListener("input", () => {
-      searchValue = searchInput.value || "";
-      apply();
-    });
-
-    // Range events
-    if (canPrice) {
+    if (priceRange && maxP > 0) {
       const onRange = () => {
-        maxAllowedPrice = Number(priceRange.value) || maxP;
-        priceValue.textContent = `${maxAllowedPrice} د.ل`;
+        maxAllowed = Number(priceRange.value) || maxP;
+        if (priceValue) priceValue.textContent = `${maxAllowed} د.ل`;
         apply();
       };
       priceRange.addEventListener("input", onRange);
@@ -477,15 +395,14 @@
     apply();
   }
 
-  // -------------------------
-  // Checkout Rendering
-  // -------------------------
+  /* -------------------------
+     Checkout Rendering
+  ------------------------- */
   function renderCheckout() {
     const itemsWrap = $("#checkoutItems");
     if (!itemsWrap) return;
 
     const cart = loadCart();
-
     const countEl = $("#checkoutCount");
     const totalEl = $("#checkoutTotal");
     const hintEl = $("#checkoutHint");
@@ -504,22 +421,22 @@
     itemsWrap.innerHTML = cart
       .map(
         (it, i) => `
-      <div class="ckItem" style="display:flex;gap:14px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:14px;margin-bottom:10px;background:color-mix(in oklab, var(--card) 92%, transparent);">
-        <img src="${it.img}" alt="${it.name}" style="width:64px;height:64px;border-radius:12px;object-fit:cover;border:1px solid var(--border);" />
-        <div style="flex:1;min-width:0;">
-          <strong style="display:block;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${it.name}</strong>
-          <span class="muted">${it.price} د.ل</span>
-        </div>
+        <div class="ckItem" style="display:flex;gap:14px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:14px;margin-bottom:10px;background:color-mix(in oklab, var(--card) 92%, transparent);">
+          <img src="${it.img}" alt="${it.name}" style="width:64px;height:64px;border-radius:12px;object-fit:cover;border:1px solid var(--border);" />
+          <div style="flex:1;min-width:0;">
+            <strong style="display:block;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${it.name}</strong>
+            <span class="muted">${it.price} د.ل</span>
+          </div>
 
-        <div style="display:flex;align-items:center;gap:8px;">
-          <button type="button" class="btn" data-ck-minus="${i}" style="padding:8px 12px;border-radius:12px;">-</button>
-          <strong style="min-width:26px;text-align:center;">${it.qty}</strong>
-          <button type="button" class="btn" data-ck-plus="${i}" style="padding:8px 12px;border-radius:12px;">+</button>
-        </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button type="button" class="btn" data-ck-minus="${i}" style="padding:8px 12px;border-radius:12px;">-</button>
+            <strong style="min-width:26px;text-align:center;">${it.qty}</strong>
+            <button type="button" class="btn" data-ck-plus="${i}" style="padding:8px 12px;border-radius:12px;">+</button>
+          </div>
 
-        <button type="button" class="btn" data-ck-remove="${i}" title="حذف" style="padding:8px 12px;border-radius:12px;">🗑️</button>
-      </div>
-    `
+          <button type="button" class="btn" data-ck-remove="${i}" title="حذف" style="padding:8px 12px;border-radius:12px;">🗑️</button>
+        </div>
+      `
       )
       .join("");
 
@@ -557,28 +474,93 @@
     });
   }
 
-  // -------------------------
-  // Guidance Accordion FIX ✅
-  // (Shows/hides the description panel)
-  // -------------------------
+  /* -------------------------
+     Thank You Popup
+  ------------------------- */
+  function showThankYou() {
+    const box = $("#thankYou");
+    if (!box) return;
+    box.hidden = false;
+
+    const card = $(".thankYou__card", box);
+    if (card) {
+      try {
+        card.animate(
+          [
+            { transform: "translateY(10px) scale(0.98)", opacity: 0 },
+            { transform: "translateY(0) scale(1)", opacity: 1 },
+          ],
+          { duration: 280, easing: "cubic-bezier(.2,.8,.2,1)", fill: "forwards" }
+        );
+      } catch {}
+    }
+  }
+
+  function hideThankYou() {
+    const box = $("#thankYou");
+    if (!box) return;
+    box.hidden = true;
+  }
+
+  function initCheckoutEvents() {
+    const confirmBtn = $("#confirmPurchase");
+    const closeBtn = $("#closeThankYou");
+    const clearBtn = $("#clearCartCheckout");
+    const box = $("#thankYou");
+
+    if (confirmBtn) {
+      confirmBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const cart = loadCart();
+        if (cart.length === 0) return;
+
+        showThankYou();
+        clearCart();
+        renderMiniCart();
+        renderCheckout();
+      });
+    }
+
+    if (closeBtn) closeBtn.addEventListener("click", hideThankYou);
+
+    // click outside the card closes
+    if (box) {
+      box.addEventListener("click", (e) => {
+        const card = $(".thankYou__card", box);
+        if (card && !card.contains(e.target)) hideThankYou();
+      });
+    }
+
+    if (clearBtn) {
+      clearBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        clearCart();
+        renderMiniCart();
+        renderCheckout();
+      });
+    }
+  }
+
+  /* -------------------------
+     Guidance Accordion (works even if panels used hidden)
+  ------------------------- */
   function initAccordion() {
     const btns = $$(".accBtn, [data-acc-btn], .faqBtn, .toggleBtn");
     if (btns.length === 0) return;
 
     btns.forEach((btn) => {
-      // Find panel:
-      // - next element sibling
-      // - OR common classes inside same parent/container
       const item = btn.closest(".accItem, .faqItem, .accordion-item, .guidanceItem") || btn.parentElement;
       let panel =
-        (item && $(".accPanel, .accContent, .panel, .desc, .content", item)) ||
-        btn.nextElementSibling;
+        (item && $(".accPanel, .accContent, .panel, .desc, .content", item)) || btn.nextElementSibling;
 
       if (!panel) return;
 
-      // Prepare default hidden state
+      // if HTML had hidden attribute, remove it so animation works
+      if (panel.hasAttribute("hidden")) panel.removeAttribute("hidden");
+
       if (!btn.hasAttribute("aria-expanded")) btn.setAttribute("aria-expanded", "false");
-      panel.classList.add("accPanel"); // ensure styling
+
+      panel.classList.add("accPanel");
       panel.style.overflow = "hidden";
       panel.style.maxHeight = "0px";
       panel.style.opacity = "0";
@@ -589,12 +571,10 @@
         btn.setAttribute("aria-expanded", isOpen ? "false" : "true");
 
         if (isOpen) {
-          // close
           panel.style.maxHeight = "0px";
           panel.style.opacity = "0";
           panel.style.pointerEvents = "none";
         } else {
-          // open
           panel.style.pointerEvents = "auto";
           panel.style.opacity = "1";
           panel.style.maxHeight = panel.scrollHeight + "px";
@@ -603,30 +583,32 @@
     });
   }
 
-  // -------------------------
-  // Misc
-  // -------------------------
-  function initYear() {
-    const y = $("#year");
-    if (y) y.textContent = String(new Date().getFullYear());
-  }
+  /* -------------------------
+     Misc
+  ------------------------- */
+ 
 
-  // -------------------------
-  // Boot
-  // -------------------------
+  /* -------------------------
+     Boot
+  ------------------------- */
   document.addEventListener("DOMContentLoaded", () => {
     initTheme();
-    initYear();
+   
 
     initMiniCartEvents();
     initAddButtons();
 
-    // ✅ Products filtering + range
-    initProductsFilterAuto();
+    // Products
+    initProductsFilters();
 
-    // ✅ Guidance fix
+
+    // Guidance
     initAccordion();
 
+    // Checkout
+    initCheckoutEvents();
+
+    // initial renders
     renderMiniCart();
     renderCheckout();
   });

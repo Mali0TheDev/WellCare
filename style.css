@@ -732,14 +732,18 @@ textarea::placeholder{
 .cartBtn{
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+  min-width: 44px;
+  height: 44px;
   border-radius: 999px;
   border: 1px solid var(--border);
   background: var(--card);
   color: var(--text);
   cursor: pointer;
   box-shadow: var(--shadow2);
+  font-size: 1.1rem;
 }
 
 /* mini cart dropdown */
@@ -1388,10 +1392,53 @@ textarea::placeholder{
   font-size: 20px;
   line-height: 1;
 }
-/* ===== Price filter (compact & neutral) ===== */
+
+/* ===== Products Filters (compact) ===== */
+.productsFilters{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin: 14px 0 18px;
+}
+
+.filtersRow{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+}
+
+/* Dropdown */
+.filterSelect{
+  width: 220px;
+  max-width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--card) 95%, transparent);
+  color: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Search */
+.productSearch{
+  width: 320px;
+  max-width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--card) 95%, transparent);
+  color: inherit;
+  outline: none;
+}
+
+/* Price filter (NOT blue + smaller) */
 .priceFilterWrap{
-  max-width: 420px;          /* يقلل العرض */
-  margin: 10px auto 16px;    /* في النص */
+  max-width: 560px;   /* أقصر من اللي كان */
+  width: 100%;
+  margin: 0 auto;
   padding: 10px 12px;
   border-radius: 12px;
   border: 1px solid var(--border);
@@ -1399,36 +1446,421 @@ textarea::placeholder{
 }
 
 .priceLabel{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
   font-size: 14px;
-  opacity: .85;
+  opacity: .9;
   margin-bottom: 6px;
 }
 
-/* slider itself */
 .priceRange{
   width: 100%;
   height: 4px;              /* أنحف */
   appearance: none;
-  background: #777;         /* ❌ مش أزرق */
+  background: #777;         /* رمادي */
   border-radius: 999px;
   outline: none;
   cursor: pointer;
 }
 
-/* thumb (circle) */
+/* thumb */
 .priceRange::-webkit-slider-thumb{
   appearance: none;
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #ddd;         /* رمادي */
-  border: 2px solid #20cb7b;
+  background: #e0e0e0;
+  border: 2px solid #9a9a9a;
+}
+.priceRange::-moz-range-thumb{
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  border: 2px solid #9a9a9a;
+}
+/* ===== Thank You Popup FIX ===== */
+.thankYou{
+  position: fixed !important;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+/* backdrop */
+.thankYou::before{
+  content:"";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 0;
+}
+
+/* card فوق الباك دروب */
+.thankYou__card{
+  position: relative;
+  z-index: 1;                 /* ✅ هذا أهم سطر */
+  width: min(520px, 92vw);
+  border-radius: 18px;
+  padding: 18px 16px;
+  border: 1px solid var(--border);
+  background: #0f1b2d;         /* خليه واضح (مش شفاف) */
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+}
+
+.thankYou__actions{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top: 12px;
+}
+/* ===== Products Filters (Dropdown + Search + Range) ===== */
+.productsFilters{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin: 14px 0 18px;
+}
+
+.filtersRow{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+}
+
+.filterSelect{
+  width: 220px;
+  max-width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--card) 95%, transparent);
+  color: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.productSearch{
+  width: 320px;
+  max-width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--card) 95%, transparent);
+  color: inherit;
+  outline: none;
+}
+
+.priceFilterWrap{
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--card) 95%, transparent);
+}
+
+.priceLabel{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size: 14px;
+  opacity: .9;
+  margin-bottom: 6px;
+}
+
+/* slider: NOT blue */
+.priceRange{
+  width: 100%;
+  height: 4px;
+  appearance: none;
+  background: #777;
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+}
+
+.priceRange::-webkit-slider-thumb{
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  border: 2px solid #9a9a9a;
 }
 
 .priceRange::-moz-range-thumb{
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #ddd;
-  border: 2px solid #172e02;
+  background: #e0e0e0;
+  border: 2px solid #9a9a9a;
+}
+
+/* ===== Thank You Popup (must be above dim) ===== */
+.thankYou{
+  position: fixed !important;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.thankYou::before{
+  content:"";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 0;
+}
+
+.thankYou__card{
+  position: relative;
+  z-index: 1;
+  width: min(520px, 92vw);
+  border-radius: 18px;
+  padding: 18px 16px;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--card) 92%, transparent);
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+}
+
+.thankYou__actions{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top: 12px;
+}
+
+/* ===== Accordion smooth ===== */
+.accPanel{
+  transition: max-height .25s ease, opacity .2s ease;
+}
+/* ===== Category Dropdown (WellCare Style) ===== */
+.filterSelect{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: 220px;
+  padding: 10px 38px 10px 14px;
+  border-radius: 14px;
+
+  background:
+    linear-gradient(135deg, #0f1b2d, #0b1626);
+  border: 1px solid rgba(255,255,255,.12);
+
+  color: #e6f2ee;
+  font-size: 14px;
+  cursor: pointer;
+
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.15);
+}
+
+/* السهم */
+.filterSelect{
+  background-image:
+    linear-gradient(135deg, #0f1b2d, #0b1626),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position:
+    0 0,
+    left 12px center;
+  background-size:
+    100% 100%,
+    16px;
+}
+
+/* عند الفوكس */
+.filterSelect:focus{
+  outline: none;
+  border-color: #1fbf84;
+  box-shadow: 0 0 0 2px rgba(31,191,132,.25);
+}
+
+/* خيارات القائمة */
+.filterSelect option{
+  background: #0f1b2d;
+  color: #e6f2ee;
+}
+/* ===== Price Range (WellCare Style) ===== */
+.priceRange{
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #1fbf84 0%,
+    #1fbf84 var(--fill, 100%),
+    rgba(255,255,255,.18) var(--fill, 100%)
+  );
+  outline: none;
+  cursor: pointer;
+}
+
+/* Thumb */
+.priceRange::-webkit-slider-thumb{
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #1fbf84;
+  border: 3px solid #0b1626;
+  box-shadow: 0 0 0 2px rgba(31,191,132,.35);
+}
+
+.priceRange::-moz-range-thumb{
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #1fbf84;
+  border: 3px solid #0b1626;
+}
+/* ===== Filters Container (Unified Card) ===== */
+.productsFilters{
+  max-width: 820px;
+  margin: 18px auto 24px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--card) 92%, transparent);
+}
+
+/* row */
+.filtersRow{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  margin-bottom: 14px;
+}
+
+/* ===== Dropdown ===== */
+.filterSelect{
+  appearance:none;
+  width: 200px;
+  padding: 10px 36px 10px 14px;
+  border-radius: 14px;
+
+  background-color: var(--card);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%231f8a4c'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 12px center;
+  background-size: 16px;
+
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.filterSelect:focus{
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.filterSelect option{
+  background: var(--card);
+  color: var(--text);
+}
+
+/* ===== Search ===== */
+.productSearch{
+  width: 320px;
+  max-width: 100%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+}
+
+.productSearch::placeholder{
+  color: var(--muted);
+}
+
+/* ===== Price Range ===== */
+.priceFilterWrap{
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.priceLabel{
+  display:flex;
+  justify-content:space-between;
+  font-size: 13px;
+  margin-bottom: 6px;
+  opacity: .85;
+  color: var(--text);
+}
+
+.priceRange{
+  appearance:none;
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--brand) 0%,
+    var(--brand) var(--fill, 100%),
+    var(--border) var(--fill, 100%)
+  );
+  cursor: pointer;
+}
+
+.priceRange::-webkit-slider-thumb{
+  appearance:none;
+  width: 14px;
+  height: 14px;
+  border-radius:50%;
+  background: var(--brand);
+  border: 2px solid var(--card);
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.priceRange::-moz-range-thumb{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background: var(--brand);
+  border: 2px solid var(--card);
+}
+/* إضافة في نهاية الملف لإصلاح الوضع النهاري للشريط العلوي */
+body:not(.dark) .topbar {
+    background-color: var(--bg) !important; /* سيأخذ لون الخلفية الفاتح في الوضع النهاري */
+    border-bottom: 1px solid var(--border);
+}
+
+body:not(.dark) .nav__link {
+    color: var(--text) !important;
+}
+
+body:not(.dark) .brand__text strong, 
+body:not(.dark) .brand__text .muted {
+    color: var(--text) !important;
+}
+
+/* إصلاح تلوين الأزرار النشطة (مثل زر المنتجات) */
+.nav__link.is-active {
+    background-color: var(--brand) !important;
+    color: #fff !important;
+    border-radius: 20px;
+    padding: 5px 15px;
 }
